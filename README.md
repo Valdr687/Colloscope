@@ -21,9 +21,8 @@ Ce programme est "sensible à la case", attention à ne pas entrer deux fois la 
 
 ## To Do
 
-*Parce que rien n'est parfait*
-
-[Roadmap]
+*Parce que rien n'est parfait*  
+[Roadmap](https://github.com/Valdr687/Coloscope/milestones)
 
 ## En cas de problème
 
@@ -33,6 +32,8 @@ Avez-vous généré un variant du coloscope ?
 Si malgré tout cela, vous avez des problèmes, anonymisez vos données et partagez moi vos messages d'erreurs, je m'en occuperai quand j'aurai le temps[^3].
 
 ## License
+
+All code is licensed under the [MPLv2 License](./LICENSE.md "License").
 
 [^1]: \> PTSI1
 [^2]: The best PTSI/PT/PT* in Aix-En-Provence !
