@@ -8,8 +8,6 @@ Générateur de coloscope optimisé pour la PTSI2[^1] de Vauvenargues.[^2]
 
 Ce programme est "sensible à la case", attention à ne pas entrer deux fois la même entrée différemment (Mr.Dupond au lieu de Mr. Dupond par exemple). Attention à ne pas entrer des lettres là où devrait se trouver des chiffres...
 
-### Procédure
-
 ### Recommendations
 
 * Logiciels :
@@ -17,12 +15,23 @@ Ce programme est "sensible à la case", attention à ne pas entrer deux fois la 
   * Modifier le code : VS Code, gratuit, utilisé lors du développement et meilleur que ce que vous trouverez dans le scolaire
 * Évitez les caractères spéciaux (é,è,ç...) pour le moment.
 
-## Modèles
+### Procédure
+
+* [ ] [Cloner le projet](https://docs.github.com/fr/repositories/creating-and-managing-repositories/cloning-a-repository) ou télécharger la dernière [release](https://github.com/Valdr687/Coloscope/releases/)
+* [ ] Utilisation des modèles
+* [ ] Export vers des fichiers csv
+* [ ] Installez pandas
+
+```bash
+pip install pandas
+```
 
 ## To Do
 
 *Parce que rien n'est parfait*  
 [Roadmap](https://github.com/Valdr687/Coloscope/milestones)
+
+* [ ] Publier une release
 
 ## En cas de problème
 
