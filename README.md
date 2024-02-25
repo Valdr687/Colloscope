@@ -32,6 +32,6 @@ Si malgré tout cela, vous avez des problèmes, anonymisez vos données et parta
 
 ## License
 
-[^1]: > PTSI1
+[^1]: \> PTSI1
 
 [^2]: The best PTSI/PT/PT* in Aix-En-Provence !
