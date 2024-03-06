@@ -2,6 +2,31 @@
 
 Générateur de coloscope optimisé pour la PTSI2[^1] de Vauvenargues.[^2]
 
+## Fonctionnalités
+
+### Fonctionnalités clés
+
+* Lecture des données sous format .csv
+
+### Aides à la réalisation
+
+* Vérification partielle des saisies
+
+***
+
+* VariantFr
+
+***
+
+* Vérification de la faisabilité de l’assignation des colles
+
+***
+
+* Colles de Français  
+$Créneaux \times Semaines$ inférieur à $Elève \times NombreColle$ ?
+
+***
+
 ## Guide
 
 ### Avertissement
