@@ -77,7 +77,7 @@ for Colle in Coloscope :
 NbCréneau*=len(Semaines)
 
 if NbCréneau<len(ElevesAColler):
-    print("Il n'a pas assez de créneaux en français, le programme affichera les élèves dont les colles n'ont pas été attribuées.")
+    print("Il n'a pas assez de créneaux en français, le programme affichera les colles qui n'ont pas été attribuées.")
     FaisabilitéFr = False
     
 for Semaine in Semaines:
@@ -198,4 +198,3 @@ for i in Coloscope:
 
 # Export des données -----------------------------------
 export_csv('Coloscope', Coloscope)
-
