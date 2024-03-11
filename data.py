@@ -154,6 +154,14 @@ def colleurs(Filtre, Coloscope=Coloscope):
 
 # Fonctions traitements
 
+def ContainLetter(string):
+    if string == '':
+        return False
+    try :
+        string=int(string)
+        return False
+    except :
+        return True
 
 def keepIntAsStr(List):  # From a list with integers and strings keep integers as strings
     Liste = []
@@ -183,12 +191,16 @@ def rotate(l, y=1):
 
 
 def getGroupeTP(trinome, GroupeTP):
+    if ContainLetter(trinome):
+        trinome=trinome[:-1]
     for i in range(len(GroupeTP)):
         if trinome in GroupeTP[i]:
             return str(i+1)
 
 
 def getGroupeTD(trinome, GroupeTD):
+    if ContainLetter(trinome):
+        trinome=trinome[:-1]
     for i in range(len(GroupeTD)):
         if trinome in GroupeTD[i]:
             return str(i+1)
@@ -258,7 +270,10 @@ def dispoLanguesEleve(trinome, GroupesLV1, GroupesLV2, Langues,rang):
 
 def dispoColle(coloscope, trinome, semaine, heure, jour):
     for Ligne in coloscope:
-        if Ligne[semaine] == trinome:
+        trinomeTest=Ligne[semaine]
+        if ContainLetter(trinomeTest) :
+            trinomeTest = trinomeTest[:len(trinomeTest)-1]
+        if trinomeTest == trinome:
             if Ligne['Jour'] == jour:
                 if Ligne['Heure'][-2:] == '30':
                     if Ligne['Heure'][:2] == heure[:2] or str(int(Ligne['Heure'][:2])+1) == heure[:2]:
@@ -310,5 +325,6 @@ def dispoEleve(GroupeTD, GroupeTP, jour, heure, semaine, Rotation, Planning, EDT
                 else:
                     return dispoRT(GroupeTD, GroupeTP, jour, heure, semaine, Rotation, Planning, trinome, coloscope)
             if i[heure] == 'Pause':
-                return dispoEDT(GroupeTD, GroupeTP, jour, heureAprès(heure), semaine, Rotation, Planning, EDT, trinome, coloscope, GroupesLV1, GroupesLV2, Langues)
+                return dispoEDT(GroupeTD, GroupeTP, jour, heureAprès(heure), semaine, Rotation, Planning, EDT, trinome, coloscope, GroupesLV1, GroupesLV2, Langues, rang)
     return 'False par défaut'
+

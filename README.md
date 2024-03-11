@@ -30,6 +30,7 @@ Si cela a un impact dans votre cas, ouvrez une [issue](https://github.com/Valdr6
 Vous pouvez accéder à la liste des fonctionnalités prévues via la [roadmap](https://github.com/Valdr687/Coloscope/milestones).  
 
 * [ ] Publier une release
+* Demi heure d'après
 
 ## En cas de problème
 

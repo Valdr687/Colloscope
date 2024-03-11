@@ -7,7 +7,7 @@ path_to_data = "./Data/"
 # Configuration
 
 FiltreInsanite = False
-Langues = ['Anglais', 'Espagnol', 'Allemand', 'Italien']
+ListeLangues = ['Anglais', 'Espagnol', 'Allemand', 'Italien']
 # En semaine paire le groupe A a les colles de la première paire et le groupe B celles de la deuxième
 Paires = [['Maths', 'Langues'], ['SII', 'Physique-Chimie']]
 # Rotation - Les mêmes que le planning des rotations
@@ -49,8 +49,8 @@ Trinomes = trinomes(Eleves)
 Colleurs = colleurs(FiltreInsanite, Coloscope)
 # Liste des groupes de TD / TP par trinome
 GroupeTD, GroupeTP = Groupes(Trinomes, 2, 3)
-GroupeLV2 = LV2(Trinomes, Langues)
-GroupeLV1 = LV1(Trinomes, Langues)
+GroupeLV2 = LV2(Trinomes, ListeLangues)
+GroupeLV1 = LV1(Trinomes, ListeLangues)
 # Emploi du temps
 EmploiDuTemps = import_csv('EmploiDuTemps')
 # Rotations
@@ -96,8 +96,8 @@ for Semaine in Semaines:
                     GroupeDeTP = getGroupeTP(trinome, GroupeTP)
                     GroupeDeTD = getGroupeTD(trinome, GroupeTD)
 
-                    #print('Semaine', Semaine, 'Jour', Colle['Jour'], 'Heure', Colle['Heure'], 'eleve',Eleve,' est ', dispoEleve(GroupeDeTP, GroupeDeTD, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, Langues,rang))
-                    if dispoEleve(GroupeDeTP, GroupeDeTD, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, Langues, rang) == True:
+                    #print('Semaine', Semaine, 'Jour', Colle['Jour'], 'Heure', Colle['Heure'], 'eleve',Eleve,' est ', dispoEleve(GroupeDeTP, GroupeDeTD, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues,rang))
+                    if dispoEleve(GroupeDeTP, GroupeDeTD, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues, rang) == True:
                         Colle[str(Semaine)] = Eleve
                         ElevesAColler.remove(Eleve)
                         ColleAttribuee = True
@@ -124,47 +124,57 @@ for Semaine in Semaines:
     for GroupeDeTD in range(len(GroupeTD)):
         for Matiere in Combinaison[GroupeDeTD]:
             if Matiere == 'Langues':
-                continue
-                # for Langue in Langues:
-                # Trinomes = deepcopy(GroupeLV1[Langue])
-                # MaxIteration = len(Trinomes)+1
-                # Iteration = 0
-                # if Langue == 'Espagnol':
-                #     print(MaxIteration)
-                # ColleAttribuee = False
-                # while ColleAttribuee is False:
-                #     Iteration += 1
-                #     TrinomesEnCours = deepcopy(Trinomes)
-                #     for Colle in Coloscope:
-                #         # Bonne matière
-                #         if Colle['Matiere'] == Langue:
-                #             for trinome in TrinomesEnCours:
-                #                 try :
-                #                     test=int(trinome[-1])
-                #                     GroupeDeTP = getGroupeTP(trinome, GroupeTP)
-                #                     if dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, Langues) == True:
-                #                         Colle[str(Semaine)] = trinome
-                #                         TrinomesEnCours.remove(trinome)
-                #                         break
-                #                 except :
-                #                     print('hi')
-                #                     lettre=trinome[-1]
-                #                     trinome=trinome[:len(trinome)-2]
-                #                     GroupeDeTP = getGroupeTP(trinome, GroupeTP)
-                #                     if dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, Langues) == True:
-                #                         Colle[str(Semaine)] = trinome+lettre
-                #                         TrinomesEnCours.remove(
-                #                             trinome+lettre)
-                #                         break
 
-                #     if TrinomesEnCours == [] or Iteration == MaxIteration:
-                #         ColleAttribuee = True
-                #     Trinomes = rotate(Trinomes)
+                for Langue in ListeLangues:
+
+                    Trinomes = []
+                    # Enlèvement des élèves de l'autre groupe
+                    for trinome in GroupeLV1[Langue]:
+                        if ContainLetter(trinome):
+                            if getGroupeTD(trinome[:len(trinome)-1], GroupeTD) == str(GroupeDeTD+1):
+                                Trinomes.append(trinome)
+                        else :
+                            if getGroupeTD(trinome,GroupeTD)==str(GroupeDeTD+1):
+                                Trinomes.append(trinome)
+
+                    # Enlèvement des élèves isolés de la langue principale ----
+                    Liste = []
+                    if Langue == ListeLangues[0]:
+                        for trinome in Trinomes:
+                            
+                            if ContainLetter(trinome) :
+                                if not trinome[:len(trinome)-1] in Liste:
+                                    Liste.append(
+                                        trinome[:len(trinome)-1])
+                            else:
+                                Liste.append(trinome)
+                        Trinomes = Liste
+                    # ----
+                    MaxIteration = len(Trinomes)+1
+                    Iteration = 0
+
+                    ColleAttribuee = False
+                    while ColleAttribuee is False:
+                        Iteration += 1
+                        TrinomesEnCours = deepcopy(Trinomes)
+                        for Colle in Coloscope:
+                            # Bonne matière
+                            if Colle['Matiere'] == Langue:
+                                    
+                                    for trinome in TrinomesEnCours:
+                                        GroupeDeTP = getGroupeTP(trinome, GroupeTP)
+                                        if dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues) == True:
+                                            Colle[str(Semaine)] = trinome
+                                            TrinomesEnCours.remove(trinome)
+                                            break
+
+                        if TrinomesEnCours == [] or Iteration == MaxIteration:
+                            ColleAttribuee = True
+                        Trinomes = rotate(Trinomes)
             else:
                 Trinomes = deepcopy(GroupeTD[GroupeDeTD])
                 MaxIteration = len(Trinomes)+1
                 Iteration = 0
-                # print("Semaine :", Semaine, "Groupe de TD :", GroupeDeTD+1,"Matiere :", Matiere, "Trinomes :", Trinomes)
 
                 ColleAttribuee = False
                 while ColleAttribuee is False:
@@ -176,7 +186,7 @@ for Semaine in Semaines:
 
                             for trinome in TrinomesEnCours:
                                 GroupeDeTP = getGroupeTP(trinome, GroupeTP)
-                                if dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, Langues) == True:
+                                if dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues) == True and dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], demiHeureAprès(Colle['Heure']), str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues) == True:
                                     Colle[str(Semaine)] = trinome
                                     TrinomesEnCours.remove(trinome)
                                     break
@@ -186,7 +196,7 @@ for Semaine in Semaines:
 
     for GroupeDeTD in range(len(GroupeTD)):
         GroupeTD[GroupeDeTD] = rotate(GroupeTD[GroupeDeTD])
-    for langue in Langues:
+    for langue in ListeLangues:
         GroupeLV1[langue] = rotate(GroupeLV1[langue])
 
 # Vacances -----------------------------------
@@ -198,3 +208,4 @@ for i in Coloscope:
 
 # Export des données -----------------------------------
 export_csv('Coloscope', Coloscope)
+
