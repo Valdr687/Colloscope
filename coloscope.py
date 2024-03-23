@@ -6,7 +6,7 @@ path_to_data = "./Data/"
 
 # Configuration
 
-FiltreInsanite = False
+FiltreInsanite = True
 ListeLangues = ['Anglais', 'Espagnol', 'Allemand', 'Italien']
 # En semaine paire le groupe A a les colles de la première paire et le groupe B celles de la deuxième
 Paires = [['Maths', 'Langues'], ['SII', 'Physique-Chimie']]
@@ -18,17 +18,16 @@ Rotation = [{'Nom': 'SI', 'Jour': 'Lundi', 'Heure': '10h00 - 12h30'},
             {'Nom': 'Info', 'Jour': 'Lundi', 'Heure': '10h00 - 12h00'},
             {'Nom': 'Info', 'Jour': 'Lundi', 'Heure': '17h00 - 19h00'}]
 # Variant
-Variant = 3
+Variant = 0
 # Français
 NombreDeCollesFr = 3
 # Entrez un seul nombre pour utiliser un unique variant ou une liste avec le variant pour chaque colle
 VariantFr = 10
-
-
 # Fin de la configuration -----------------------------------
 
 # Données complémentaires - Auto-générées -----------------------------------
 Impaires = [Paires[i] for i in range(len(Paires)-1, -1, -1)]
+Echec = 0
 
 # Vérification des saisies -----------------------------------
 
@@ -37,7 +36,7 @@ try:
     VariantFr = int(VariantFr)
     VariantFr = [VariantFr for i in range(NombreDeCollesFr)]
 except ValueError:
-    if len(VariantFr) != NombreDeCollesFr:
+    if len(VariantFr) != NombreDeCollesFr:  # type: ignore
         print('Une erreur a été détectée : Il manque des variants pour une ou plusieurs colles de français. ', end="")
         VariantFr = [VariantFr[0] for i in range(NombreDeCollesFr)]
         print('Le programme utilisera', VariantFr)
@@ -58,28 +57,61 @@ Planning = import_csv('Rotation')
 
 # Generation du coloscope
 
+# Fonction génératrice
+
+
+def générateur(Semaine, Coloscope, Trinomes, Matiere, GroupeDeTD):
+    '''
+    Génère la semaine du coloscope
+    '''
+    ColoscopeInitial = deepcopy(Coloscope)
+    for ListeTrinome in Trinomes:
+
+        for TrinomesAColler in ListeTrinome:
+
+            
+            for Colle in Coloscope:
+                if Colle['Matiere'] == Matiere:
+                    trinome = TrinomesAColler[0]
+                    GroupeDeTP = getGroupeTP(trinome, GroupeTP)
+                    if dispoEDT(GroupeDeTD+1, GroupeDeTP, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues) == True and dispoEDT(GroupeDeTD+1, GroupeDeTP, Colle['Jour'], demiHeureAprès(Colle['Heure']), str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues) == True:
+                        Colle[str(Semaine)] = trinome
+                        TrinomesAColler.remove(trinome)
+                    else :
+                        # print(TrinomesAColler)
+                        Coloscope = deepcopy(ColoscopeInitial)
+                        # print('Trinome',trinome,'Jour',Colle['Jour'],'heure',Colle['Heure'],dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], Colle['Heure'], str(
+                        #     Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues))
+                        break
+                if TrinomesAColler == []:
+                    return Coloscope
+    print('Il semble qu\'il est impossible de générer les colles de cette matière')
+    return ColoscopeInitial
+
+
 Semaines = keepIntAsStr(list(Coloscope[0].keys()))
 
 # Colles de français -----------------------------------
 
 ElevesAColler = []
-for Decalage in VariantFr:
+for Decalage in VariantFr:  # type: ignore
     ElevesAColler += rotate(ListeEleves(Trinomes), Decalage)
 
 # Etude la faisabilité
 
-NbCréneau=0
-FaisabilitéFr=None
+NbCréneau = 0
+FaisabilitéFr = None
 
-for Colle in Coloscope :
+for Colle in Coloscope:
     if Colle['Matiere'] == 'Francais':
-        NbCréneau+=1
-NbCréneau*=len(Semaines)
+        NbCréneau += 1
+NbCréneau *= len(Semaines)
 
-if NbCréneau<len(ElevesAColler):
+if NbCréneau < len(ElevesAColler):
     print("Il n'a pas assez de créneaux en français, le programme affichera les colles qui n'ont pas été attribuées.")
     FaisabilitéFr = False
-    
+
+
 for Semaine in Semaines:
     for Colle in Coloscope:
         if Colle['Matiere'] == 'Francais':
@@ -96,8 +128,7 @@ for Semaine in Semaines:
                     GroupeDeTP = getGroupeTP(trinome, GroupeTP)
                     GroupeDeTD = getGroupeTD(trinome, GroupeTD)
 
-                    #print('Semaine', Semaine, 'Jour', Colle['Jour'], 'Heure', Colle['Heure'], 'eleve',Eleve,' est ', dispoEleve(GroupeDeTP, GroupeDeTD, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues,rang))
-                    if dispoEleve(GroupeDeTP, GroupeDeTD, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues, rang) == True:
+                    if dispoEleve(GroupeDeTD, GroupeDeTP, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues, rang) == True:
                         Colle[str(Semaine)] = Eleve
                         ElevesAColler.remove(Eleve)
                         ColleAttribuee = True
@@ -105,99 +136,50 @@ for Semaine in Semaines:
                 if ElevesAColler == [] or Iteration == MaxIteration:
                     ColleAttribuee = True
 
-if FaisabilitéFr is False :
+if FaisabilitéFr is False:
     print(ElevesAColler)
 
 
 # Autres colles -----------------------------------
 
-# Variant
+
+# Combinaison
+CombinaisonsGroupeTD = []
 for GroupeDeTD in range(len(GroupeTD)):
-    GroupeTD[GroupeDeTD] = rotate(GroupeTD[GroupeDeTD], Variant)
+    CombinaisonsGroupeTD.append(Permutations(GroupeTD[GroupeDeTD]))
+# Variant
+for GroupeDeTD in range(len(CombinaisonsGroupeTD)):
+    CombinaisonsGroupeTD[GroupeDeTD] = rotate(
+        CombinaisonsGroupeTD[GroupeDeTD], Variant)
 
 # Generation par semaine du coloscope
+Semaines = Semaines
+
+
 for Semaine in Semaines:
+    print('Le programme traite la semaine', Semaine)
     if estPaire(Semaine):
         Combinaison = Paires
     else:
         Combinaison = Impaires
-    for GroupeDeTD in range(len(GroupeTD)):
+    for GroupeDeTD in range(len(CombinaisonsGroupeTD)):
         for Matiere in Combinaison[GroupeDeTD]:
+            print('GroupeDeTD', GroupeDeTD+1, 'Matière', Matiere)
             if Matiere == 'Langues':
+                continue
 
-                for Langue in ListeLangues:
-
-                    Trinomes = []
-                    # Enlèvement des élèves de l'autre groupe
-                    for trinome in GroupeLV1[Langue]:
-                        if ContainLetter(trinome):
-                            if getGroupeTD(trinome[:len(trinome)-1], GroupeTD) == str(GroupeDeTD+1):
-                                Trinomes.append(trinome)
-                        else :
-                            if getGroupeTD(trinome,GroupeTD)==str(GroupeDeTD+1):
-                                Trinomes.append(trinome)
-
-                    # Enlèvement des élèves isolés de la langue principale ----
-                    Liste = []
-                    if Langue == ListeLangues[0]:
-                        for trinome in Trinomes:
-                            
-                            if ContainLetter(trinome) :
-                                if not trinome[:len(trinome)-1] in Liste:
-                                    Liste.append(
-                                        trinome[:len(trinome)-1])
-                            else:
-                                Liste.append(trinome)
-                        Trinomes = Liste
-                    # ----
-                    MaxIteration = len(Trinomes)+1
-                    Iteration = 0
-
-                    ColleAttribuee = False
-                    while ColleAttribuee is False:
-                        Iteration += 1
-                        TrinomesEnCours = deepcopy(Trinomes)
-                        for Colle in Coloscope:
-                            # Bonne matière
-                            if Colle['Matiere'] == Langue:
-                                    
-                                    for trinome in TrinomesEnCours:
-                                        GroupeDeTP = getGroupeTP(trinome, GroupeTP)
-                                        if dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues) == True:
-                                            Colle[str(Semaine)] = trinome
-                                            TrinomesEnCours.remove(trinome)
-                                            break
-
-                        if TrinomesEnCours == [] or Iteration == MaxIteration:
-                            ColleAttribuee = True
-                        Trinomes = rotate(Trinomes)
             else:
-                Trinomes = deepcopy(GroupeTD[GroupeDeTD])
-                MaxIteration = len(Trinomes)+1
-                Iteration = 0
+                Trinomes = deepcopy(CombinaisonsGroupeTD[GroupeDeTD])
+                Coloscope = générateur(
+                    Semaine, Coloscope, Trinomes, Matiere, GroupeDeTD)
+                export_csv('Colloscope', Coloscope)
 
-                ColleAttribuee = False
-                while ColleAttribuee is False:
-                    Iteration += 1
-                    TrinomesEnCours = deepcopy(Trinomes)
-                    for Colle in Coloscope:
-                        # Bonne matière
-                        if Colle['Matiere'] == Matiere:
-
-                            for trinome in TrinomesEnCours:
-                                GroupeDeTP = getGroupeTP(trinome, GroupeTP)
-                                if dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], Colle['Heure'], str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues) == True and dispoEDT(GroupeDeTP, GroupeDeTD+1, Colle['Jour'], demiHeureAprès(Colle['Heure']), str(Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues) == True:
-                                    Colle[str(Semaine)] = trinome
-                                    TrinomesEnCours.remove(trinome)
-                                    break
-                    if TrinomesEnCours == [] or Iteration == MaxIteration:
-                        ColleAttribuee = True
-                    Trinomes = rotate(Trinomes)
-
-    for GroupeDeTD in range(len(GroupeTD)):
-        GroupeTD[GroupeDeTD] = rotate(GroupeTD[GroupeDeTD])
+    for GroupeDeTD in range(len(CombinaisonsGroupeTD)):
+        CombinaisonsGroupeTD[GroupeDeTD] = rotate(
+            CombinaisonsGroupeTD[GroupeDeTD], 1)
     for langue in ListeLangues:
         GroupeLV1[langue] = rotate(GroupeLV1[langue])
+    export_csv('Colloscope', Coloscope)
 
 # Vacances -----------------------------------
 for i in Coloscope:
@@ -207,5 +189,6 @@ for i in Coloscope:
             i[Vacances] = 'Vacances'
 
 # Export des données -----------------------------------
-export_csv('Coloscope', Coloscope)
+export_csv('Colloscope', Coloscope)
+
 

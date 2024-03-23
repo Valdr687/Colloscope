@@ -4,7 +4,7 @@ Générateur de coloscope optimisé pour la PTSI2[^1] de Vauvenargues.[^2]
 
 ## Introduction
 
-Ce projet est né d'une volonté de ne plus être collé sur mes cours d'Espagnol.
+Ce projet est né d'une volonté de ne plus être collé sur mes cours d'Espagnol, en pensant au trinome 11...
 
 ## Guide
 

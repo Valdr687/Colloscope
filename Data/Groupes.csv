@@ -1,11 +1,11 @@
 trinome,Rang,PTSI2  2023/24,Gr.TP,Gr. TD,LV1,LV2
 1,a,�tudiant 1,1,A,Anglais,Espagnol
-1,b,�tudiant 2,1,A,Anglais,Espagnol
+1,b,�tudiant 2,1,A,Allemand,Anglais
 1,c,�tudiant 3,1,A,Anglais,Espagnol
-2,a,�tudiant 4,1,A,Allemand,Anglais
-2,b,�tudiant 5,1,A,Anglais,Allemand
-2,c,�tudiant 6,1,A,Anglais,Italien
-3,a,�tudiant 7,1,A,Espagnol,Anglais
+2,a,�tudiant 4,1,A,Anglais,
+2,b,�tudiant 5,1,A,Anglais,
+2,c,�tudiant 6,1,A,Anglais,
+3,a,�tudiant 7,1,A,Anglais,
 3,b,�tudiant 8,1,A,Anglais,
 3,c,�tudiant 9,1,A,Anglais,
 4,a,�tudiant 10,1,A,Anglais,

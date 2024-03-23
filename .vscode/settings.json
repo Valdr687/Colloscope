@@ -3,6 +3,7 @@
         "attribuee",
         "Attribuee",
         "Calmeil",
+        "Colloscope",
         "Creneau",
         "Creneaux",
         "creneauxcolles",
@@ -13,6 +14,8 @@
         "Eleve",
         "eleves",
         "Eleves",
+        "fernet",
+        "Fernet",
         "Francais",
         "Matiere",
         "PTSI",
@@ -22,9 +25,13 @@
         "Trinome",
         "trinomes",
         "Trinomes",
-        "Vauvenargues"
+        "Vauvenargues",
+        "Wcxzb",
+        "Xshk"
     ],
     "cSpell.ignoreWords": [
         "Insanite"
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": false
 }

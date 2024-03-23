@@ -264,9 +264,9 @@ def dispoRT(GroupeTD, GroupeTP, jour, heure, semaine, Rotations, Planning, trino
                     if Ligne['Rotation'+str(RangRotation)] == 'Cours':
                         return 'en cours - rotation'
                     if Ligne['Rotation'+str(RangRotation)] == 'Libre':
-                        return dispoColle(coloscope, trinome, semaine, heure, jour)
+                        return True
                 RangRotation += 1
-    return dispoColle(coloscope, trinome, semaine, heure, jour)
+    return True
 
 
 def dispoLangues(trinome, GroupesLV1, GroupesLV2, Langues):
@@ -306,7 +306,7 @@ def dispoEDT(GroupeTD, GroupeTP, jour, heure, semaine, Rotation, Planning, EDT, 
     for i in EDT:
         if i['Jour'] == jour:
             if i[heure] in ['Libre', 'Alternance']:
-                return dispoColle(coloscope, trinome, semaine, heure, jour)
+                return True
             if i[heure] == 'Cours':
                 return 'en cours'
             if i[heure] == 'Langues':
