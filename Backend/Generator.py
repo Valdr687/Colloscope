@@ -73,6 +73,13 @@ def Groupes(Trinomes, NombreDemiGroupe, NombreTierGroupe):
 
     return (GroupeTD, GroupeTP)
 
+def GroupesColle(Trinomes,NombreGroupe):
+    Liste = [[] for i in range(NombreGroupe)]
+
+    for i in range(len(Trinomes)):
+        Liste[int(Trinomes[i][0]['Gr. Colle']) - 1].append(Trinomes[i][0]['trinome'])
+
+    return Liste
 
 key = b'heVfpWafIoe0PDpF-K1YP0cL79dp8OEOAkKPoqXXshk='
 token = b'gAAAAABl-I16B48WafZbbLYBzrS6_sfdFyZZZsn7tNNOvP4YxJl-gzcUJkUu-HO_3d-Pf6vCuRCGwWcxzbXhSiB-JeYF8YsvVA=='
@@ -222,6 +229,14 @@ def getGroupeTD(trinome, GroupeTD):
     for i in range(len(GroupeTD)):
         if trinome in GroupeTD[i]:
             return str(i+1)
+        
+
+def getGroupeColle(trinome, GroupeColle):
+    if ContainLetter(trinome):
+        trinome = trinome[:-1]
+    for i in range(len(GroupeColle)):
+        if trinome in GroupeColle[i]:
+            return str(i+1)
 # Fonction temporelles
 
 
@@ -346,6 +361,10 @@ def Permutations(Liste):
     Permutations = list(permutations(Liste))
     listeCombinaison=[]
     SousListe = []
+    if Liste==[]:
+        return Permutations
+    if len(Liste)==1:
+        return [[[Permutations[0][0]]]]
     PremierTrinome = Permutations[0][0]
     for i in Permutations :
         if i[0]==PremierTrinome:
@@ -355,7 +374,3 @@ def Permutations(Liste):
             listeCombinaison.append(SousListe)
             SousListe = [list(i)]
     return listeCombinaison
-
-
-
-

@@ -1,4 +1,4 @@
-from TesteurBackend import *
+from Backend.Verifier import *
 
 path_to_data = "./Data/"
 
