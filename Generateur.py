@@ -80,10 +80,7 @@ def générateur(Semaine, Coloscope, Trinomes, Matiere):
                         Colle[str(Semaine)] = trinome
                         TrinomesAColler.remove(trinome)
                     else :
-                        # print(TrinomesAColler)
                         Coloscope = deepcopy(ColoscopeInitial)
-                        # print('Trinome',trinome,'Jour',Colle['Jour'],'heure',Colle['Heure'],dispoEDT(GroupeDeTP, GroupeDeTD, Colle['Jour'], Colle['Heure'], str(
-                        #     Semaine), Rotation, Planning, EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues))
                         break
                 if TrinomesAColler == []:
                     return Coloscope

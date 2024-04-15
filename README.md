@@ -1,4 +1,4 @@
-# Coloscope
+# Générateur de Colloscope
 
 Générateur de coloscope optimisé pour la PTSI2[^1] de Vauvenargues.[^2]
 

@@ -149,13 +149,15 @@ def colleurs(Filtre, Coloscope : list):
     Liste = [{'Nom': Coloscope[0]['Nom'], 'Matiere': Coloscope[0]['Matiere'],
               'Creneaux': [{'Creneau': [Coloscope[0]['Jour'], Coloscope[0]['Heure']], 'Salle': Coloscope[0]['Salle']}]}]
     DernierColleur = 0
-    for i in range(1, len(Coloscope)):
+    for i in range(len(Coloscope)):
 
         ColleursEnCours = {'Nom': '', 'Matiere': '',
                            'Creneaux': []}
         ColleursEnCours['Nom'] = Coloscope[i]['Nom']
 
         secret = decrypt(token, key).decode()
+        secret=str(secret)
+        print(ColleursEnCours['Nom'].lower())
         if secret in ColleursEnCours['Nom'].lower() and Filtre:
             messagebox.showwarning(
                 "Error", "The coloscope you're using appear to contain a forbidden word. The author of this program does not condone child abuse and verbal violence.")
