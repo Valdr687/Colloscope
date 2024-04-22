@@ -38,7 +38,7 @@ try:
 except ValueError:
     if len(VariantFr) != NombreDeCollesFr:  # type: ignore
         print('Une erreur a été détectée : Il manque des variants pour une ou plusieurs colles de français. ', end="")
-        VariantFr = [VariantFr[0] for i in range(NombreDeCollesFr)]
+        VariantFr = [VariantFr[0] for i in range(NombreDeCollesFr)] # type: ignore
         print('Le programme utilisera', VariantFr)
 
 # Import des donnees -----------------------------------
@@ -68,6 +68,28 @@ def générateur(Semaine, Coloscope, Trinomes, Matiere):
         print('Pas de trinome à coller')
         return Coloscope
     ColoscopeInitial = deepcopy(Coloscope)
+    # Vérification de la faisabilité des colles
+    ListeHeure = {}
+    for Colle in Coloscope:
+        if Colle['Matiere'] == Matiere:
+            if Colle['Jour'] in ListeHeure.keys():
+                ListeHeure[Colle['Jour']].append(Colle['Heure'])
+            else:
+                ListeHeure[Colle['Jour']] = [Colle['Heure']]
+    print(ListeHeure)
+    Incompatibilités = 0
+    for jour in list(ListeHeure.keys()):
+        for heure in ListeHeure[jour] :
+            for rotation in Rotation:
+                if rotation['Jour']==jour:
+                    
+                    if heure < rotation['Heure'][-5:] and heure >= rotation['Heure'][:5]:
+                        print(heure, jour)
+                        Incompatibilités +=1
+    if Incompatibilités!=0:
+        print('Après analyse du planning des rotations,',Incompatibilités,'colles ne peuvent être assurées')
+
+    
     for ListeTrinome in Trinomes:
         for TrinomesAColler in ListeTrinome:
             
@@ -109,8 +131,7 @@ if NbCréneau < len(ElevesAColler):
     print("Il n'a pas assez de créneaux en français, le programme affichera les colles qui n'ont pas été attribuées.")
     FaisabilitéFr = False
 
-
-for Semaine in Semaines:
+for Semaine in [51]:
     for Colle in Coloscope:
         if Colle['Matiere'] == 'Francais':
             MaxIteration = len(ElevesAColler) + 1
