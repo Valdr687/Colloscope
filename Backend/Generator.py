@@ -28,7 +28,7 @@ def decrypt(token: bytes, key: bytes) -> bytes:
 
 def import_csv(fichier, path=path_to_data):
     lecteur = csv.DictReader(open(path+fichier + '.csv', 'r'))
-    return [dict(ligne) for ligne in lecteur]
+    return [dict(ligne) for ligne in lecteur] # type: ignore
 
 
 def export_csv(nom, file):
@@ -157,7 +157,6 @@ def colleurs(Filtre, Coloscope : list):
 
         secret = decrypt(token, key).decode()
         secret=str(secret)
-        print(ColleursEnCours['Nom'].lower())
         if secret in ColleursEnCours['Nom'].lower() and Filtre:
             messagebox.showwarning(
                 "Error", "The coloscope you're using appear to contain a forbidden word. The author of this program does not condone child abuse and verbal violence.")
@@ -330,7 +329,7 @@ def dispoEDT(GroupeTD, GroupeTP, jour, heure, semaine, Rotation, Planning, EDT, 
                 return dispoLangues(trinome, GroupesLV1, GroupesLV2, Langues)
             if i[heure] == 'Rotation':
                 
-                return dispoRT(GroupeTD, GroupeTP, jour, heure+'00', semaine, Rotation, Planning, trinome, coloscope)
+                return dispoRT(GroupeTD, GroupeTP, jour, heure, semaine, Rotation, Planning, trinome, coloscope)
             if i[heure] == 'Pause':
                 return dispoEDT(GroupeTD, GroupeTP, jour, heureAprès(heure), semaine, Rotation, Planning, EDT, trinome, coloscope, GroupesLV1, GroupesLV2, Langues)
     return False
