@@ -38,7 +38,7 @@ try:
 except ValueError:
     if len(VariantFr) != NombreDeCollesFr:  # type: ignore
         print('Une erreur a été détectée : Il manque des variants pour une ou plusieurs colles de français. ', end="")
-        VariantFr = [VariantFr[0] for i in range(NombreDeCollesFr)]
+        VariantFr = [VariantFr[0] for i in range(NombreDeCollesFr)] # type: ignore
         print('Le programme utilisera', VariantFr)
 
 # Import des donnees -----------------------------------
