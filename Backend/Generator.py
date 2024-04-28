@@ -268,13 +268,13 @@ def heureAprès(heure):
 
 
 def dispoRT(GroupeTD, GroupeTP, jour, heure, semaine, Rotations, Planning, trinome, coloscope):
+    if heure[-1]=='h' :
+        heure += '00'
     for Ligne in Planning:
         if Ligne['Semaine'] == semaine:
-            
             RangRotation = 0
             for rotation in Rotations:
-                
-                if rotation['Jour'] == jour and heure < rotation['Heure'][-5:] and heure >= rotation['Heure'][:5]:
+                if rotation['Jour'] == jour and heure >= rotation['Heure'][:5] and heure < rotation['Heure'][-5:]:
                     if Ligne['Rotation'+str(RangRotation)] in ['TD'+str(GroupeTD), 'TP'+str(GroupeTP)]:
                         return 'en tp/td'
                     if Ligne['Rotation'+str(RangRotation)] == 'Cours':
@@ -378,4 +378,7 @@ def Permutations(Liste):
             PremierTrinome = i[0]
             listeCombinaison.append(SousListe)
             SousListe = [list(i)]
+    listeCombinaison.append(SousListe)
+           
     return listeCombinaison
+
