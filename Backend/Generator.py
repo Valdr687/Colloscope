@@ -286,10 +286,14 @@ def dispoRT(GroupeTD, GroupeTP, jour, heure, semaine, Rotations, Planning, trino
 
 
 def dispoLangues(trinome, GroupesLV1, GroupesLV2, Langues):
+    trinome = str(trinome)
     for Langue in Langues:
         if Langue != 'Anglais':
             for i in GroupesLV1[Langue]+GroupesLV2[Langue]:
-                if trinome == i[:len(i)-1] or trinome == i:
+                
+                if trinome == i[:len(i)-1] :
+                    return 'en LV1 / LV2'
+                if trinome == i:
                     return 'en LV1 / LV2'
     return True
 

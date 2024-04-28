@@ -111,6 +111,16 @@ def générateur(Semaine, Coloscope, Trinomes, Matiere):
 
 Semaines = keepIntAsStr(list(Coloscope[0].keys()))
 
+def test(trinome,heure,jour,semaine):
+    TD = getGroupeTD(trinome,GroupeTP)
+    TP = getGroupeTP(trinome,GroupeTP)
+    Dispo = dispoEDT(TD,TP,jour,heure,semaine,Rotation,Planning,EmploiDuTemps,trinome,Coloscope,GroupeLV1,GroupeLV2,ListeLangues)
+    print(trinome,heure,jour,semaine,Dispo)
+    Dispo = dispoEDT(TD, TP, jour, demiHeureAprès(heure), semaine, Rotation, Planning,
+                     EmploiDuTemps, trinome, Coloscope, GroupeLV1, GroupeLV2, ListeLangues)
+    print(trinome, demiHeureAprès(heure), jour, semaine, Dispo)
+
+
 # Colles de français -----------------------------------
 
 ElevesAColler = []
@@ -196,7 +206,7 @@ for Langue in ListeLangues:
         CombinaisonsLangues[Langue].append(Permutations(
             CombinaisonsLangueEnCours[GroupeDeColle]))
 # Generation par semaine du coloscope
-Semaines = Semaines
+Semaines = Semaines[:2]
 
 for Semaine in Semaines:
     print('Le programme traite la semaine', Semaine)
