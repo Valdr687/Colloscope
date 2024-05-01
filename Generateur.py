@@ -64,44 +64,38 @@ def générateur(Semaine, Coloscope, Trinomes, Matiere):
     '''
     Génère la semaine du coloscope
     '''
+    # Cas particulier
     if Trinomes == [()]:
         print('Pas de trinome à coller')
         return Coloscope
+    
     ColoscopeInitial = deepcopy(Coloscope)
-    # Vérification de la faisabilité des colles
-    # ListeHeure = {}
-    # for Colle in Coloscope:
-    #     if Colle['Matiere'] == Matiere:
-    #         if Colle['Jour'] in ListeHeure.keys():
-    #             ListeHeure[Colle['Jour']].append(Colle['Heure'])
-    #         else:
-    #             ListeHeure[Colle['Jour']] = [Colle['Heure']]
-    # print(ListeHeure)
-    # Incompatibilités = 0
-    # for jour in list(ListeHeure.keys()):
-    #     for heure in ListeHeure[jour] :
-    #         for rotation in Rotation:
-    #             if rotation['Jour']==jour:
-                    
-    #                 if heure < rotation['Heure'][-5:] and heure >= rotation['Heure'][:5]:
-    #                     print(heure, jour)
-    #                     Incompatibilités +=1
-    # if Incompatibilités!=0:
-    #     print('Après analyse du planning des rotations,',Incompatibilités,'colles ne peuvent être assurées')
+    # Vérification préliminaire
+    NombreDeColle = 0
+    NombreDeTrinome = len(Trinomes[0][0])
+    for Colle in Coloscope :
+        if Colle['Matiere'] == Matiere:
+            NombreDeColle +=1
+    
+    DegréLiberté = NombreDeColle - NombreDeTrinome
+    MargeUtilisée = 0
 
-    MeilleureGlobale = 0
-    MeilleureLocale = 0
+    if NombreDeTrinome > NombreDeColle :
+        print("Il manque des créneaux de colle, vérifiez vos entrées")
+        return Coloscope
+    
     MeilleureCombinaison = []
-    MeilleurRemplissage = 9
-
+    MeilleurRemplissage = len(Trinomes[0])+1
     Globale = -1
     Locale = -1
 
     TrinomesIntact = deepcopy(Trinomes)
     for ListeTrinome in Trinomes:
-        print(ListeTrinome[0][0])
+        #print(ListeTrinome[0][0])
         Globale += 1
         Locale = -1
+        MargeUtilisée = 0
+
         for TrinomesAColler in ListeTrinome:
             
             Locale += 1
@@ -115,14 +109,18 @@ def générateur(Semaine, Coloscope, Trinomes, Matiere):
                         TrinomesAColler.remove(trinome)
                     else :
                         if len(TrinomesAColler) < MeilleurRemplissage :
-                            MeilleureGlobale,MeilleureLocale = Globale,Locale
                             MeilleurRemplissage = len(TrinomesAColler)
                             try :
                                 MeilleureCombinaison = TrinomesIntact[Globale][Locale]
                             except :
                                 print(Locale)
                         Coloscope = deepcopy(ColoscopeInitial)
-                        break
+                        if MargeUtilisée < DegréLiberté :
+                            MargeUtilisée +=1
+                            #print('Colle suivante')
+                        else :
+                            break
+                            
                 if TrinomesAColler == []:
                     return Coloscope
             
@@ -163,7 +161,7 @@ if NbCréneau < len(ElevesAColler):
     print("Il n'a pas assez de créneaux en français, le programme affichera les colles qui n'ont pas été attribuées.")
     FaisabilitéFr = False
 
-for Semaine in []:
+for Semaine in Semaines:
     for Colle in Coloscope:
         if Colle['Matiere'] == 'Francais':
             MaxIteration = len(ElevesAColler) + 1
@@ -228,7 +226,7 @@ for Langue in ListeLangues:
         CombinaisonsLangues[Langue].append(Permutations(
             CombinaisonsLangueEnCours[GroupeDeColle]))
 # Generation par semaine du coloscope
-Semaines = Semaines[:1]
+
 
 for Semaine in Semaines:
     print('Le programme traite la semaine', Semaine)
