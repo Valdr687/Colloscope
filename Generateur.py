@@ -2,7 +2,9 @@
 
 from Backend.Generator import *
 from copy import deepcopy
+from time import * # type: ignore
 path_to_data = "./Data/"
+t1 = time()
 
 # Configuration
 
@@ -125,9 +127,26 @@ def générateur(Semaine, Coloscope, Trinomes, Matiere):
                     return Coloscope
             
         
-        print(MeilleureCombinaison,MeilleurRemplissage)
-    print('Il semble qu\'il est impossible de générer les colles de cette matière')
-    return ColoscopeInitial
+        #print(MeilleureCombinaison,MeilleurRemplissage)
+    Rang = 0
+    MeilleurRemplissage = NombreDeTrinome - MeilleurRemplissage
+    for Colle in Coloscope :
+        if Colle['Matiere'] == Matiere:
+            
+
+            if MeilleureCombinaison == []:
+                return Coloscope
+            
+            trinome = MeilleureCombinaison[0]
+
+            if Rang<MeilleurRemplissage:
+                Colle[str(Semaine)] = trinome
+            else :
+                Colle[str(Semaine)] = trinome + ' à déplacer'
+            MeilleureCombinaison.remove(trinome)
+
+            Rang += 1
+    return Coloscope
 
 Semaines = keepIntAsStr(list(Coloscope[0].keys()))
 
@@ -266,4 +285,6 @@ for i in Coloscope:
 # Export des données -----------------------------------
 export_csv('Colloscope', Coloscope)
 
-#['3', '7', '9', '1', '5', '11', '13', '15']
+TempsExécution = time()-t1
+
+print("Fin de l’exécution du programme en", convert(TempsExécution))
